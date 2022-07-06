@@ -1,27 +1,31 @@
 <template>
-  <div class="screen-fix bg">
-    <NavbarComponent/>
-    <div class="center">
+  <div class="bg">
+    <NavbarComponent class="navbar" />
+    <div class="fix">
+
       <router-view></router-view>
     </div>
   </div>
 </template>
 <script setup>
-import NavbarComponent from './components/NavbarComponent.vue';
-
-
+import NavbarComponent from "./components/NavbarComponent.vue";
 </script>
 
 <style scoped>
-.screen-fix{
-  display: flex;
+.navbar {
+  position: absolute;
+  z-index: 100;
+  top: 0;
 }
-.bg{
-  background-color: #F7F7F7;
+.bg {
+  background-color: #f7f7f7;
   min-height: 100vh;
 }
-.center{
-  margin: 0 auto;
+.fix {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 /*
 nav a {

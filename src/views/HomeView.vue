@@ -1,35 +1,25 @@
 <template>
-  <div class="fix">
+  <div>
     <HeaderComponent />
-    <LoginComponent />
-
-    
+    <LoginComponent v-if="!userLog" />
+    <LogedComponent v-else />
   </div>
 </template>
 
-<script>
-import HeaderComponent from "@/components/HeaderComponent.vue";
-// import LoginComponent from "@/components/home/LoginComponent.vue";
+<script setup>
+//Vue
+import { computed } from "vue";
 
-export default ({
-  name: "HomeView",
-  components: {
-    HeaderComponent,
-    //LoginComponent,
-  },
+//Firebase
+import { useAuthStore } from "@/db/auth";
+
+//Components
+import HeaderComponent from "@/components/HeaderComponent.vue";
+import LoginComponent from "@/components/home/LoginComponent.vue";
+import LogedComponent from "@/components/home/LogedComponent.vue";
+
+//Al trabajar con script setup hay que importar la prop computed para que sea reactivo
+const userLog = computed(() => {
+  return useAuthStore().isLoggedIn;
 });
 </script>
-
-<style scoped>
-.auth-button {
-  display: flex;
-  width: 100%;
-  justify-content: end;
-}
-.fix {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-</style>
