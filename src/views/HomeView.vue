@@ -1,18 +1,35 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="fix">
+    <HeaderComponent />
+    <LoginComponent />
+
+    
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import HeaderComponent from "@/components/HeaderComponent.vue";
+// import LoginComponent from "@/components/home/LoginComponent.vue";
 
-export default {
-  name: 'HomeView',
+export default ({
+  name: "HomeView",
   components: {
-    HelloWorld
-  }
-}
+    HeaderComponent,
+    //LoginComponent,
+  },
+});
 </script>
+
+<style scoped>
+.auth-button {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+.fix {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>

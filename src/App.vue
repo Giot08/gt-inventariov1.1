@@ -1,24 +1,29 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div class="screen-fix bg">
+    <NavbarComponent/>
+    <div class="center">
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
+<script setup>
+import NavbarComponent from './components/NavbarComponent.vue';
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+
+</script>
+
+<style scoped>
+.screen-fix{
+  display: flex;
 }
-
-nav {
-  padding: 30px;
+.bg{
+  background-color: #F7F7F7;
+  min-height: 100vh;
 }
-
+.center{
+  margin: 0 auto;
+}
+/*
 nav a {
   font-weight: bold;
   color: #2c3e50;
@@ -26,5 +31,5 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
-}
+}*/
 </style>
