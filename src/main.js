@@ -18,28 +18,29 @@ const firebaseConfig = {
   projectId: "app-inventario-giot",
   storageBucket: "app-inventario-giot.appspot.com",
   messagingSenderId: "79317979628",
-  appId: "1:79317979628:web:faa81407fff018c7d4f0c9",
+  appId: "1:79317979628:web:faa81407fff018c7d4f0c9"
 };
 
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore(firebase);
-export { db };
+
+export {db}
 
 //UX/UI
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
+//Init app
+app.use(router).use(pinia).use(Antd);
 
-/*
+
 // Components
 // import
-import NavBar from "@/components/Navbar.vue";
-import LogoComponent from "@/components/Logo.vue";
+import NavBar from "@/components/NavbarComponent.vue";
 
 // Declarations
-app.component("nav-bar", NavBar).component("logo-component", LogoComponent); */
+app.component("navbar-component", NavBar);
 
-app.use(router).use(pinia).use(Antd);
 
 //Mount
 app.mount("#app");

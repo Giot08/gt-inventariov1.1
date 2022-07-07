@@ -9,10 +9,8 @@
 <script setup>
 //Vue
 import { computed } from "vue";
-
-//Firebase
+//Stores '@/db'
 import { useAuthStore } from "@/db/auth";
-
 //Components
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import LoginComponent from "@/components/home/LoginComponent.vue";

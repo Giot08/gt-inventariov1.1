@@ -60,5 +60,6 @@ export const useAuthStore = defineStore({
           console.log(errorCode, this.errorMessage);
         });
     },
+    
   },
 });

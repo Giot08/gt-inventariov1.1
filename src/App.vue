@@ -1,15 +1,13 @@
 <template>
   <div class="bg">
-    <NavbarComponent class="navbar" />
+    <navbar-component class="navbar">
+    </navbar-component>
     <div class="fix">
 
       <router-view></router-view>
     </div>
   </div>
 </template>
-<script setup>
-import NavbarComponent from "./components/NavbarComponent.vue";
-</script>
 
 <style scoped>
 .navbar {
@@ -17,16 +15,20 @@ import NavbarComponent from "./components/NavbarComponent.vue";
   z-index: 100;
   top: 0;
 }
+
 .bg {
   background-color: #f7f7f7;
   min-height: 100vh;
 }
+
 .fix {
+  margin-top: 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 /*
 nav a {
   font-weight: bold;
