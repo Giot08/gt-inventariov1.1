@@ -6,6 +6,7 @@ import {
   // createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import router from "@/router";
 
 export const useAuthStore = defineStore({
     id: "auth",
@@ -52,7 +53,7 @@ export const useAuthStore = defineStore({
         .then(() => {
           this.email = "";
           console.log("¡Sesión finalizada!");
-          next("/");
+          router.push('/');
         })
         .catch((error) => {
           const errorCode = error.code;

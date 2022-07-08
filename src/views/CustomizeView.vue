@@ -1,11 +1,10 @@
 <template>
-  <h2>customize</h2>
+  <h2>Personalizar</h2>
+  <CustomizeComponentVue />
 </template>
 
-<script>
-export default {
-
-}
+<script setup>
+import CustomizeComponentVue from '@/components/custom/CustomizeComponent.vue';
 </script>
 
 <style>

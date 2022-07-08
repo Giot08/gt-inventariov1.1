@@ -22,7 +22,7 @@
 }
 
 .fix {
-  margin-top: 80px;
+  padding-top: 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
