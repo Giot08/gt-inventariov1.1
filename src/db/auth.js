@@ -9,14 +9,16 @@ import {
 import router from "@/router";
 
 export const useAuthStore = defineStore({
-    id: "auth",
-  state: () => ({
-    isLoggedIn: false,
-    email: "",
-    password: "",
-    /*repassword: "",
+  id: "auth",
+  state: () => {
+    return {
+      isLoggedIn: false,
+      email: "",
+      password: "",
+      /*repassword: "",
     errorMessage: "", */
-  }),
+    };
+  },
   actions: {
     /*
     register() {
@@ -44,7 +46,7 @@ export const useAuthStore = defineStore({
         .catch((error) => {
           const errorCode = error.code;
           this.errorMessage = error.message;
-          console.log('ERROR' + errorCode, this.errorMessage);
+          console.log("ERROR" + errorCode, this.errorMessage);
         });
     },
     signout() {
@@ -53,7 +55,7 @@ export const useAuthStore = defineStore({
         .then(() => {
           this.email = "";
           console.log("¡Sesión finalizada!");
-          router.push('/');
+          router.push("/");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -61,6 +63,5 @@ export const useAuthStore = defineStore({
           console.log(errorCode, this.errorMessage);
         });
     },
-    
   },
 });

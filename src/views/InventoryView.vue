@@ -20,7 +20,7 @@
 //Vue
 import { onMounted } from 'vue'
 //Stores '@/db'
-import { useInventoryStore } from '@/db/inventario'
+import { useInventoryStore } from '@/db/inventory'
 //Firebase
 
 const inventoryStore = useInventoryStore()

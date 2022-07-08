@@ -12,57 +12,89 @@ import { db } from "@/main";
 
 export const useCustomStore = defineStore({
   id: "custom",
-  state: () => ({
-    container: [
-      {
-        label: "Bodega",
-        placeholder: "Añardir Bodega",
-        type: "text",
-        model: '{this.data.storage}',
-      },
-      {
-        label: "Categoria",
-        placeholder: "Añardir Categoria",
-        type: "text",
-        model: "text",
-      },
-      {
-        label: "Sub categoria",
-        placeholder: "Añardir Sub categoria",
-        type: "text",
-        model: "text",
-      },
-      {
-        label: "Medicion",
-        placeholder: "Añardir Medicion",
-        type: "text",
-        model: "text",
-      },
-      {
-        label: "Producto",
-        placeholder: "Añardir Producto",
-        type: "text",
-        model: "text",
-      },
-    ],
-    data: {
-      category: "",
-      subCategory: "",
-      medition: "",
+
+  state: () => {
+    return {
+      container: [
+        {
+          label: "Bodega",
+          arg: "storages",
+          placeholder: "Añardir Bodega",
+          type: "text",
+          model: "",
+          columns: [
+            {
+              title: "Bodegas",
+              dataIndex: "name",
+            },
+          ],
+          data: [],
+        },
+        {
+          label: "Categoria",
+          arg: "categories",
+          placeholder: "Añardir Categoria",
+          type: "text",
+          model: "",
+          columns: [
+            {
+              title: "Categorias",
+              dataIndex: "name",
+            },
+          ],
+          data: [],
+        },
+        {
+          label: "Sub categoria",
+          arg: "subcategories",
+          placeholder: "Añardir Sub categoria",
+          type: "text",
+          model: "",
+          columns: [
+            {
+              title: "Sub categorias",
+              dataIndex: "name",
+            },
+          ],
+          data: [],
+        },
+        {
+          label: "Medicion",
+          arg: "meditions",
+          placeholder: "Añardir Medicion",
+          type: "text",
+          model: "",
+          columns: [
+            {
+              title: "Mediciones",
+              dataIndex: "name",
+            },
+          ],
+          data: [],
+        },
+        {
+          label: "Producto",
+          arg: "products",
+          placeholder: "Añardir Producto",
+          type: "text",
+          model: "",
+          columns: [
+            {
+              title: "Productos",
+              dataIndex: "name",
+            },
+          ],
+          data: [],
+        },
+      ],
       product: {
         name: "",
         category: "",
         subcategory: "",
         medition: "",
       },
-      storage: "",
-    },
-    categories: [],
-    subcategories: [],
-    meditions: [],
-    products: [],
-    storages: [],
-  }),
+    };
+  },
   actions: {
     //Agrega un producto sin stock a todas las bodegas
     async addProduct() {
@@ -70,12 +102,12 @@ export const useCustomStore = defineStore({
         let storage = this.storages[i].name;
         await addDoc(collection(db, storage), {
           bodega: storage,
-          nombre: this.data.product.name,
-          categoria: this.data.product.proCategory,
-          subcategoria: this.data.product.proSubCategory,
-          unidad: this.data.product.proMedition,
+          nombre: this.product.name,
+          categoria: this.product.category,
+          subcategoria: this.product.subcategory,
+          unidad: this.product.medition,
           ultIngreso: "Sin ingreso registrado",
-          ultRetiro: "Sin Retiro registrado",
+          ultRetiro: "Sin retiro registrado",
           stock: 0,
         })
           .then(() => {
@@ -87,14 +119,14 @@ export const useCustomStore = defineStore({
           });
       }
       await addDoc(collection(db, "productClass"), {
-        name: this.datos.product.name,
-        category: this.datos.product.proCategory,
-        subcategoruy: this.datos.product.proSubCategory,
-        medition: this.datos.product.proMedition,
+        name: this.product.name,
+        category: this.product.category,
+        subcategoruy: this.product.subcategory,
+        medition: this.product.medition,
       })
         .then(() => {
+          this.product = {};
           this.products = [];
-          this.datos.product = [];
           this.getData("products");
           console.log("producto añadido");
         })
@@ -105,58 +137,63 @@ export const useCustomStore = defineStore({
     },
     async addItem(type) {
       // Intentar eliminar los if y usar solo el type para crear una funcion valida
-      if (type === "categories" && this.data.category.length > 0) {
-        await addDoc(collection(db, "categories"), {
-          name: this.data.category,
-        })
-          .then(() => {
-            this.categories = [];
-            this.data.category = "";
-            this.getData("categories");
-            console.log(this.categorias);
-          })
-          .catch((error) => {
-            alert("Error al añadir el documento: ", error);
-            console.error("Error al añadir el documento: ", error);
-          });
-      } else if (type === "subcategories" && this.data.subCategory.length > 0) {
-        await addDoc(collection(db, "subcategories"), {
-          name: this.data.subCategory,
-        })
-          .then(() => {
-            this.subcategories = [];
-            this.data.subCategory = "";
-            this.getData("subcategories");
-            console.log(this.subcategories);
-          })
-          .catch((error) => {
-            console.error("Error al añadir el documento: ", error);
-          });
-      } else if (type === "meditions" && this.datos.unidad.length > 0) {
-        await addDoc(collection(db, "meditions"), {
-          name: this.data.medition,
-        })
-          .then(() => {
-            this.medition = [];
-            this.data.medition = "";
-            this.getData("meditions");
-            console.log(this.unidades);
-          })
-          .catch((error) => {
-            alert("Error al añadir el documento: ", error);
-            console.error("Error al añadir el documento: ", error);
-          });
-      } else if (type === "storages" && this.data.storage.length > 0) {
+      // console.log(type);
+
+      if (type === "storages" && this.container[0].model.length > 0) {
         await addDoc(collection(db, "storages"), {
-          name: this.data.storage,
+          name: this.container[0].model,
         })
           .then(() => {
-            this.storages = [];
-            this.data.storage = "";
+            this.container[0].data = [];
+            this.container[0].model = "";
             this.getData("storages");
-            // console.log(this.bodegas)
+            console.log(this.container[0]);
           })
           .catch((error) => {
+            console.error("Error al añadir el documento: ", error);
+          });
+      } else if (type === "categories" && this.container[1].model.length > 0) {
+        await addDoc(collection(db, "categories"), {
+          name: this.container[1].model,
+        })
+          .then(() => {
+            this.container[1].data = [];
+            this.container[1].model = "";
+            this.getData("categories");
+            console.log(this.container[1].data);
+          })
+          .catch((error) => {
+            alert("Error al añadir el documento: ", error);
+            console.error("Error al añadir el documento: ", error);
+          });
+      } else if (
+        type === "subcategories" &&
+        this.container[2].model.length > 0
+      ) {
+        await addDoc(collection(db, "subcategories"), {
+          name: this.container[2].model,
+        })
+          .then(() => {
+            this.container[2].data = [];
+            this.container[2].model = "";
+            this.getData("subcategories");
+            console.log(this.container.data[2]);
+          })
+          .catch((error) => {
+            console.error("Error al añadir el documento: ", error);
+          });
+      } else if (type === "meditions" && this.container[3].model.length > 0) {
+        await addDoc(collection(db, "meditions"), {
+          name: this.container[3].model,
+        })
+          .then(() => {
+            this.container[3].data = [];
+            this.container[3].model = "";
+            this.getData("meditions");
+            console.log(this.container.data[3]);
+          })
+          .catch((error) => {
+            alert("Error al añadir el documento: ", error);
             console.error("Error al añadir el documento: ", error);
           });
       }
@@ -167,42 +204,43 @@ export const useCustomStore = defineStore({
         let dataCat = doc.data();
         dataCat.id = doc.id;
 
-        if (prop === "categories") {
+        if (prop === "storages") {
+          this.container[0].data.push(dataCat);
+          this.container[0] = this.container[0].sort(function (a, b) {
+            return a.name.localeCompare(b.name);
+          });
+        } else if (prop === "categories") {
           //Aca empujamos
           // this.prop.push(dataCat); Probar este medoto cuando todo este conectado
-          this.categories.push(dataCat);
-          this.categories = this.categories.sort(function (a, b) {
+          this.container[1].data.push(dataCat);
+          this.container[1] = this.container[1].sort(function (a, b) {
             return a.name.localeCompare(b.name);
           });
         } else if (prop === "subcategories") {
-          this.subcategories.push(dataCat);
-          this.subcategories = this.subcategories.sort(function (a, b) {
+          this.container[2].data.push(dataCat);
+          this.container[2] = this.container[2].sort(function (a, b) {
             return a.name.localeCompare(b.name);
           });
         } else if (prop === "meditions") {
-          this.meditions.push(dataCat);
-          this.meditions = this.meditions.sort(function (a, b) {
+          this.container[3].data.push(dataCat);
+          this.container[3] = this.container[3].sort(function (a, b) {
             return a.name.localeCompare(b.name);
           });
         } else if (prop === "products") {
-          this.products.push(dataCat);
-          this.products = this.products.sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
-        } else if (prop === "storages") {
-          this.storages.push(dataCat);
-          this.storages = this.storages.sort(function (a, b) {
+          this.container[4].data.push(dataCat);
+          this.container[4] = this.container[4].sort(function (a, b) {
             return a.name.localeCompare(b.name);
           });
         }
       });
     },
     getAllDatas() {
+      console.log("Montando all data");
+      this.getData("storages");
       this.getData("categories");
       this.getData("subcategories");
-      this.getProps("meditions");
+      this.getData("meditions");
       this.getData("products");
-      this.getData("storages");
     },
 
     async deleteItem(id, collection) {

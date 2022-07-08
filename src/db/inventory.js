@@ -5,73 +5,75 @@ import { db } from "@/main";
 
 export const useInventoryStore = defineStore({
   id: "inventory",
-  state: () => ({
-    bodegas: [],
-    inventario: [],
-    productos: [],
-    columns: [
-      {
-        title: "Bodega",
-        dataIndex: "bodega",
-        key: "bodega",
-        sorter: {
-          compare: (a, b) => a.bodega.localeCompare(b.bodega),
+  state: () => {
+    return {
+      bodegas: [],
+      inventario: [],
+      productos: [],
+      columns: [
+        {
+          title: "Bodega",
+          dataIndex: "bodega",
+          key: "bodega",
+          sorter: {
+            compare: (a, b) => a.bodega.localeCompare(b.bodega),
+          },
         },
-      },
-      {
-        title: "Categoria",
-        dataIndex: "categoria",
-        key: "categoria",
-        sorter: {
-          compare: (a, b) => a.categoria.localeCompare(b.categoria),
+        {
+          title: "Categoria",
+          dataIndex: "categoria",
+          key: "categoria",
+          sorter: {
+            compare: (a, b) => a.categoria.localeCompare(b.categoria),
+          },
         },
-      },
-      {
-        title: "Sub Categoria",
-        dataIndex: "subcategoria",
-        key: "subcategoria",
-        sorter: {
-          compare: (a, b) => a.subcategoria.localeCompare(b.subcategoria),
+        {
+          title: "Sub Categoria",
+          dataIndex: "subcategoria",
+          key: "subcategoria",
+          sorter: {
+            compare: (a, b) => a.subcategoria.localeCompare(b.subcategoria),
+          },
         },
-      },
-      {
-        title: "Producto",
-        dataIndex: "nombre",
-        key: "nombre",
-        sorter: {
-          compare: (a, b) => a.nombre.localeCompare(b.nombre),
+        {
+          title: "Producto",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
         },
-      },
-      {
-        title: "Medida",
-        dataIndex: "unidad",
-        key: "unidad",
-        sorter: {
-          compare: (a, b) => a.unidad.localeCompare(b.unidad),
+        {
+          title: "Medida",
+          dataIndex: "unidad",
+          key: "unidad",
+          sorter: {
+            compare: (a, b) => a.unidad.localeCompare(b.unidad),
+          },
         },
-      },
-      {
-        title: "Ult. Ingreso",
-        dataIndex: "ultIngreso",
-        key: "ultIngreso",
-        sorter: {
-          compare: (a, b) => a.ultIngreso.localeCompare(b.ultIngreso),
+        {
+          title: "Ult. Ingreso",
+          dataIndex: "ultIngreso",
+          key: "ultIngreso",
+          sorter: {
+            compare: (a, b) => a.ultIngreso.localeCompare(b.ultIngreso),
+          },
         },
-      },
-      {
-        title: "Ult. Retiro",
-        dataIndex: "ultRetiro",
-        key: "ultRetiro",
-        sorter: {
-          compare: (a, b) => a.ultRetiro - b.ultRetiro,
+        {
+          title: "Ult. Retiro",
+          dataIndex: "ultRetiro",
+          key: "ultRetiro",
+          sorter: {
+            compare: (a, b) => a.ultRetiro.localeCompare(b.ultRetiro),
+          },
         },
-      },
-      {
-        title: "Borrar",
-        dataIndex: "borrar",
-      },
-    ],
-  }),
+        {
+          title: "Borrar",
+          dataIndex: "borrar",
+        },
+      ],
+    };
+  },
   actions: {
     async delProduct(id, collection) {
       const coll = collection;
