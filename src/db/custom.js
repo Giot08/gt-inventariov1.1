@@ -26,6 +26,14 @@ export const useCustomStore = defineStore({
             {
               title: "Bodegas",
               dataIndex: "name",
+              key: "name",
+              sorter: {
+                compare: (a, b) => a.name.localeCompare(b.name),
+              },
+            },
+            {
+              title: "",
+              dataIndex: "borrar",
             },
           ],
           data: [],
@@ -40,6 +48,14 @@ export const useCustomStore = defineStore({
             {
               title: "Categorias",
               dataIndex: "name",
+              key: "name",
+              sorter: {
+                compare: (a, b) => a.name.localeCompare(b.name),
+              },
+            },
+            {
+              title: "",
+              dataIndex: "borrar",
             },
           ],
           data: [],
@@ -54,6 +70,14 @@ export const useCustomStore = defineStore({
             {
               title: "Sub categorias",
               dataIndex: "name",
+              key: "name",
+              sorter: {
+                compare: (a, b) => a.name.localeCompare(b.name),
+              },
+            },
+            {
+              title: "",
+              dataIndex: "borrar",
             },
           ],
           data: [],
@@ -68,20 +92,14 @@ export const useCustomStore = defineStore({
             {
               title: "Mediciones",
               dataIndex: "name",
+              key: "name",
+              sorter: {
+                compare: (a, b) => a.name.localeCompare(b.name),
+              },
             },
-          ],
-          data: [],
-        },
-        {
-          label: "Producto",
-          arg: "products",
-          placeholder: "Añardir Producto",
-          type: "text",
-          model: "",
-          columns: [
             {
-              title: "Productos",
-              dataIndex: "name",
+              title: "",
+              dataIndex: "borrar",
             },
           ],
           data: [],
@@ -92,6 +110,28 @@ export const useCustomStore = defineStore({
         category: "",
         subcategory: "",
         medition: "",
+      },
+      productclass:{
+        label: "Producto",
+        arg: "products",
+        placeholder: "Añardir Producto",
+        type: "text",
+        model: "",
+        columns: [
+          {
+            title: "Productos",
+            dataIndex: "name",
+            key: "name",
+            sorter: {
+              compare: (a, b) => a.name.localeCompare(b.name),
+            },
+          },
+          {
+            title: "",
+            dataIndex: "borrar",
+          },
+        ],
+        data: [],
       },
     };
   },
@@ -206,31 +246,16 @@ export const useCustomStore = defineStore({
 
         if (prop === "storages") {
           this.container[0].data.push(dataCat);
-          this.container[0] = this.container[0].sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
         } else if (prop === "categories") {
           //Aca empujamos
           // this.prop.push(dataCat); Probar este medoto cuando todo este conectado
           this.container[1].data.push(dataCat);
-          this.container[1] = this.container[1].sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
         } else if (prop === "subcategories") {
           this.container[2].data.push(dataCat);
-          this.container[2] = this.container[2].sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
         } else if (prop === "meditions") {
           this.container[3].data.push(dataCat);
-          this.container[3] = this.container[3].sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
         } else if (prop === "products") {
           this.container[4].data.push(dataCat);
-          this.container[4] = this.container[4].sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
         }
       });
     },
@@ -244,20 +269,20 @@ export const useCustomStore = defineStore({
     },
 
     async deleteItem(id, collection) {
+      console.log(id, collection);
+
       const coll = collection;
       await deleteDoc(doc(db, coll, id)).then(() => {
-        if (coll === "categories") {
-          this.categories = this.categories.filter((item) => item.id !== id);
+        if (coll === "storages") {
+          this.container[0].data = this.container[0].data.filter((item) => item.id !== id);
+        } else if (coll === "categories") {
+          this.container[1].data = this.container[1].data.filter((item) => item.id !== id);
         } else if (coll === "subcategories") {
-          this.subcategories = this.subcategories.filter(
-            (item) => item.id !== id
-          );
+          this.container[2].data = this.container[2].data.filter((item) => item.id !== id);
         } else if (coll === "meditions") {
-          this.meditions = this.meditions.filter((item) => item.id !== id);
+          this.container[3].data = this.container[3].data.filter((item) => item.id !== id);
         } else if (coll === "products") {
-          this.products = this.products.filter((item) => item.id !== id);
-        } else if (coll === "storages") {
-          this.storages = this.storages.filter((item) => item.id !== id);
+          this.container[4].data = this.container[4].data.filter((item) => item.id !== id);
         }
       });
     },
