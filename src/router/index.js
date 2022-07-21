@@ -21,11 +21,6 @@ const routes = [
     name: 'inventory',
     component: () => import('../views/InventoryView.vue')
   },
-  {
-    path: '/distribucion',
-    name: 'manage',
-    component: () => import('../views/ManageView.vue')
-  },
 ]
 
 const router = createRouter({

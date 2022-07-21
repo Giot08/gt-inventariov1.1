@@ -1,8 +1,9 @@
 <template>
   <div>
-    <a-collapse style="min-width: 90vw" v-model:activeKey="activeKey" accordion>
+    <a-collapse style="min-width: 90vw" accordion>
       <a-collapse-panel key="5" :header="custom.productclass.label">
         <a-spin
+          delay="3000"
           v-show="custom.productclass.table.data == 0"
           style="
             display: flex;
@@ -11,7 +12,6 @@
             margin: 1rem;
             gap: 1em;
           "
-          :indicator="indicator"
           tip="Cargando"
         />
         <a-input
@@ -76,7 +76,7 @@
             <template v-if="column.dataIndex === 'borrar'">
               <a-popconfirm
                 title="¿Seguro deseas borrar este item?"
-                @confirm="custom.deleteItem(record.id, `${container.arg}`)"
+                @confirm="custom.deleteItem(record.id, 'productClass')"
               >
                 <a-button danger type="primary">Borrar</a-button>
               </a-popconfirm>

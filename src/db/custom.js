@@ -8,7 +8,9 @@ import {
   doc,
   deleteDoc,
 } from "firebase/firestore/lite";
+
 import { db } from "@/main";
+import { useInventoryStore } from "@/db/inventory";
 
 export const useCustomStore = defineStore({
   id: "custom",
@@ -32,7 +34,7 @@ export const useCustomStore = defineStore({
               },
             },
             {
-              title: "",
+              title: "Eliminar",
               dataIndex: "borrar",
             },
           ],
@@ -54,7 +56,7 @@ export const useCustomStore = defineStore({
               },
             },
             {
-              title: "",
+              title: "Eliminar",
               dataIndex: "borrar",
             },
           ],
@@ -76,7 +78,7 @@ export const useCustomStore = defineStore({
               },
             },
             {
-              title: "",
+              title: "Eliminar",
               dataIndex: "borrar",
             },
           ],
@@ -98,7 +100,7 @@ export const useCustomStore = defineStore({
               },
             },
             {
-              title: "",
+              title: "Eliminar",
               dataIndex: "borrar",
             },
           ],
@@ -113,7 +115,7 @@ export const useCustomStore = defineStore({
       },
       productclass: {
         label: "Producto",
-        arg: "products",
+        arg: "productClass",
         placeholder: "Añardir Producto",
         type: "text",
         model: "",
@@ -166,8 +168,9 @@ export const useCustomStore = defineStore({
   actions: {
     //Agrega un producto sin stock a todas las bodegas
     async addProduct() {
-      // const store = this.container[0].data;
       // console.log(store[0].name);
+
+      const store = this.container[0].data;
       const name = this.product.name;
       const category = this.product.category;
       const subcategory = this.product.subcategory;
@@ -223,18 +226,18 @@ export const useCustomStore = defineStore({
         await addDoc(collection(db, "productClass"), {
           name: name,
           category: category,
-          subcategoruy: subcategory,
+          subcategory: subcategory,
           medition: medition,
         })
           .then(() => {
+            this.products = [];
             this.product = {
               name: "Nombre",
               category: "Categoria",
               subcategory: "Sub Categoria",
               medition: "Unidad de Medida",
             };
-            this.products = [];
-            this.getData("products");
+            this.getData("productClass");
             console.log("producto añadido");
           })
           .catch(function (error) {
@@ -242,11 +245,9 @@ export const useCustomStore = defineStore({
             console.error("Error al añadir el documento!", error);
           });
       }
+      useInventoryStore().getInventoryData()
     },
     async addItem(type) {
-      // Intentar eliminar los if y usar solo el type para crear una funcion valida
-      // console.log(type);
-
       if (type === "storages" && this.container[0].model.length > 0) {
         await addDoc(collection(db, "storages"), {
           name: this.container[0].model,
@@ -324,8 +325,8 @@ export const useCustomStore = defineStore({
           this.container[2].data.push(dataCat);
         } else if (prop === "meditions") {
           this.container[3].data.push(dataCat);
-        } else if (prop === "products") {
-          this.container[4].data.push(dataCat);
+        } else if (prop === "productClass") {
+          this.productclass.table.data.push(dataCat);
         }
       });
     },
@@ -335,7 +336,7 @@ export const useCustomStore = defineStore({
       this.getData("categories");
       this.getData("subcategories");
       this.getData("meditions");
-      this.getData("products");
+      this.getData("productClass");
     },
 
     async deleteItem(id, collection) {
@@ -359,8 +360,8 @@ export const useCustomStore = defineStore({
           this.container[3].data = this.container[3].data.filter(
             (item) => item.id !== id
           );
-        } else if (coll === "products") {
-          this.container[4].data = this.container[4].data.filter(
+        } else if (coll === "productClass") {
+          this.productclass.table.data = this.productclass.table.data.filter(
             (item) => item.id !== id
           );
         }

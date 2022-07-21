@@ -12,17 +12,20 @@ import { onMounted } from 'vue';
 import { onMounted } from "vue";
 // Stores
 import { useCustomStore } from "@/db/custom";
+import { useInventoryStore } from "@/db/inventory";
 
+const inventoryStore = useInventoryStore()
 const custom = useCustomStore();
 
 onMounted(() => {
   custom.getAllDatas();
+  inventoryStore.getStorages();
 });
 </script>
 
 <style scoped>
 .navbar {
-  position: absolute;
+  position: fixed;
   z-index: 100;
   top: 0;
 }

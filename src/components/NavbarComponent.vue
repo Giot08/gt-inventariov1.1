@@ -33,12 +33,6 @@
         </template>
         <router-link to="/personalizar">Personalizar</router-link>
       </a-menu-item>
-      <a-menu-item v-if="collapsed" key="4">
-        <template #icon>
-          <ShoppingCartOutlined />
-        </template>
-        <router-link to="/distribucion">Ingresos y Retiros</router-link>
-      </a-menu-item>
       <a-menu-item v-if="collapsed" key="5">
         <template #icon>
           <FallOutlined />
@@ -66,14 +60,12 @@ import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
   FallOutlined,
-  ShoppingCartOutlined,
 } from "@ant-design/icons-vue";
 export default defineComponent({
   components: {
     HomeFilled,
     ToolFilled,
     DesktopOutlined,
-    ShoppingCartOutlined,
     ArrowRightOutlined,
     ArrowLeftOutlined,
     FallOutlined,

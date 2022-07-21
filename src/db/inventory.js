@@ -7,125 +7,122 @@ export const useInventoryStore = defineStore({
   id: "inventory",
   state: () => {
     return {
-      bodegas: [],
-      inventario: [],
-      productos: [],
+      storages: [],
+      products: [],
       columns: [
         {
           title: "Bodega",
-          dataIndex: "bodega",
-          key: "bodega",
+          dataIndex: "storage",
+          key: "storage",
           sorter: {
-            compare: (a, b) => a.bodega.localeCompare(b.bodega),
+            compare: (a, b) => a.storage.localeCompare(b.storage),
           },
         },
         {
           title: "Categoria",
-          dataIndex: "categoria",
-          key: "categoria",
+          dataIndex: "category",
+          key: "category",
           sorter: {
-            compare: (a, b) => a.categoria.localeCompare(b.categoria),
+            compare: (a, b) => a.category.localeCompare(b.category),
           },
         },
         {
           title: "Sub Categoria",
-          dataIndex: "subcategoria",
-          key: "subcategoria",
+          dataIndex: "subcategory",
+          key: "subcategory",
           sorter: {
-            compare: (a, b) => a.subcategoria.localeCompare(b.subcategoria),
+            compare: (a, b) => a.subcategory.localeCompare(b.subcategory),
           },
         },
         {
           title: "Producto",
-          dataIndex: "nombre",
-          key: "nombre",
+          dataIndex: "name",
+          key: "name",
           sorter: {
-            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+            compare: (a, b) => a.name.localeCompare(b.name),
           },
         },
         {
           title: "Medida",
-          dataIndex: "unidad",
-          key: "unidad",
+          dataIndex: "medition",
+          key: "medition",
           sorter: {
-            compare: (a, b) => a.unidad.localeCompare(b.unidad),
+            compare: (a, b) => a.medition.localeCompare(b.medition),
+          },
+        },
+        {
+          title: "Stock",
+          dataIndex: "stock",
+          key: "stock",
+          sorter: {
+            compare: (a, b) => a.stock.localeCompare(b.stock),
           },
         },
         {
           title: "Ult. Ingreso",
-          dataIndex: "ultIngreso",
-          key: "ultIngreso",
+          dataIndex: "lastIn",
+          key: "lastIn",
           sorter: {
-            compare: (a, b) => a.ultIngreso.localeCompare(b.ultIngreso),
+            compare: (a, b) => a.lastIn.localeCompare(b.lastIn),
           },
         },
         {
           title: "Ult. Retiro",
-          dataIndex: "ultRetiro",
-          key: "ultRetiro",
+          dataIndex: "lastWithdraw",
+          key: "lastWithdraw",
           sorter: {
-            compare: (a, b) => a.ultRetiro.localeCompare(b.ultRetiro),
+            compare: (a, b) => a.lastWithdraw.localeCompare(b.lastWithdraw),
           },
         },
         {
+          title: "Editar",
+          dataIndex: "edit",
+        },
+        {
           title: "Borrar",
-          dataIndex: "borrar",
+          dataIndex: "delete",
         },
       ],
     };
   },
   actions: {
-    async delProduct(id, collection) {
-      const coll = collection;
-      console.log(id, coll);
-      await deleteDoc(doc(db, coll, id));
-      this.montar();
-    },
-    async getInventario() {
-      for (let i = 0; i < this.bodegas.length; i++) {
-        const coll = await getDocs(
-          collection(db, `Bodega ${this.bodegas[i].name}`)
-        );
-        coll.forEach((doc) => {
-          let dataCat = doc.data();
-          dataCat.id = doc.id;
-          this.inventario.push(dataCat);
-        });
-      }
-      this.getProductosInventario();
-    },
-    async getBodegas() {
-      const coll = await getDocs(collection(db, "bodegas"));
+    async getStorages() {
+      const coll = await getDocs(collection(db, "storages"));
       coll.forEach((doc) => {
         let dataCat = doc.data();
         dataCat.id = doc.id;
-        this.bodegas.push(dataCat);
+        this.storages.push(dataCat);
       });
-      this.bodegas = this.bodegas.sort(function (a, b) {
-        return a.name.localeCompare(b.name);
-      });
-      this.getInventario();
+      console.log(this.storages);
+      this.getProducts();
     },
-    getProductosInventario() {
-      for (let i = 0; i < this.bodegas.length; i++) {
-        if (i == 0) {
-          this.productos.Iquique = this.inventario.filter(
-            (item) => item.bodega == this.bodegas[i].name
-          );
-        } else {
-          this.productos.Pica = this.inventario.filter(
-            (item) => item.bodega == this.bodegas[i].name
-          );
-        }
+    async getProducts() {
+      for (let i = 0; i < this.storages.length; i++) {
+        const coll = await getDocs(collection(db, this.storages[i].name));
+        coll.forEach((doc) => {
+          let dataCat = doc.data();
+          dataCat.id = doc.id;
+          this.products.push(dataCat);
+        });
       }
+      this.products = this.products.sort(function (a, b) {
+        return a.storage.localeCompare(b.storage);
+      });
+      console.log(this.products);
     },
-    montar() {
-      console.log("montando");
-      this.inventario = [];
-      this.bodegas = [];
-      this.productos = [];
-      this.getBodegas();
-      this.getProductosInventario();
+    modifyStock(action, storage, id, name, stock, medition) {
+      console.log(action, storage, id, name, stock, medition);
+    },
+    async deleteProductFromStorage(id, collection) {
+      const coll = collection;
+      console.log(id, coll);
+      await deleteDoc(doc(db, coll, id));
+      this.getInventoryData();
+    },
+    getInventoryData() {
+      this.storages = [];
+      this.products = [];
+      this.getStorages();
     },
   },
 });
