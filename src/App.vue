@@ -1,13 +1,24 @@
+import { onMounted } from 'vue';
 <template>
   <div class="bg">
-    <navbar-component class="navbar">
-    </navbar-component>
+    <navbar-component class="navbar"> </navbar-component>
     <div class="fix">
-
       <router-view></router-view>
     </div>
   </div>
 </template>
+<script setup>
+//Vue
+import { onMounted } from "vue";
+// Stores
+import { useCustomStore } from "@/db/custom";
+
+const custom = useCustomStore();
+
+onMounted(() => {
+  custom.getAllDatas();
+});
+</script>
 
 <style scoped>
 .navbar {

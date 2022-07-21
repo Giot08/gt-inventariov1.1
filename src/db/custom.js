@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { defineStore } from "pinia";
-
+import { Modal } from "ant-design-vue";
 import {
   collection,
   addDoc,
@@ -106,74 +106,142 @@ export const useCustomStore = defineStore({
         },
       ],
       product: {
-        name: "",
-        category: "",
-        subcategory: "",
-        medition: "",
+        name: "Nombre",
+        category: "Categoria",
+        subcategory: "Sub Categoria",
+        medition: "Unidad de Medida",
       },
-      productclass:{
+      productclass: {
         label: "Producto",
         arg: "products",
         placeholder: "Añardir Producto",
         type: "text",
         model: "",
-        columns: [
-          {
-            title: "Productos",
-            dataIndex: "name",
-            key: "name",
-            sorter: {
-              compare: (a, b) => a.name.localeCompare(b.name),
+        table: {
+          label: "Produtos añadidos",
+          arg: "productClass",
+          columns: [
+            {
+              title: "Nombre",
+              dataIndex: "name",
+              key: "name",
+              sorter: {
+                compare: (a, b) => a.name.localeCompare(b.name),
+              },
             },
-          },
-          {
-            title: "",
-            dataIndex: "borrar",
-          },
-        ],
-        data: [],
+            {
+              title: "Categoria",
+              dataIndex: "category",
+              key: "category",
+              sorter: {
+                compare: (a, b) => a.category.localeCompare(b.category),
+              },
+            },
+            {
+              title: "Sub Categoria",
+              dataIndex: "subcategory",
+              key: "subcategory",
+              sorter: {
+                compare: (a, b) => a.subcategory.localeCompare(b.subcategory),
+              },
+            },
+            {
+              title: "Medición",
+              dataIndex: "medition",
+              key: "medition",
+              sorter: {
+                compare: (a, b) => a.medition.localeCompare(b.medition),
+              },
+            },
+            {
+              title: "Eliminar",
+              dataIndex: "borrar",
+            },
+          ],
+          data: [],
+        },
       },
     };
   },
   actions: {
     //Agrega un producto sin stock a todas las bodegas
     async addProduct() {
-      for (let i = 0; i < this.storages.length; i++) {
-        let storage = this.storages[i].name;
-        await addDoc(collection(db, storage), {
-          bodega: storage,
-          nombre: this.product.name,
-          categoria: this.product.category,
-          subcategoria: this.product.subcategory,
-          unidad: this.product.medition,
-          ultIngreso: "Sin ingreso registrado",
-          ultRetiro: "Sin retiro registrado",
-          stock: 0,
+      // const store = this.container[0].data;
+      // console.log(store[0].name);
+      const name = this.product.name;
+      const category = this.product.category;
+      const subcategory = this.product.subcategory;
+      const medition = this.product.medition;
+
+      if (name.toLowerCase() === "nombre" || name === "") {
+        Modal.warning({
+          title: "Nombre Invalido",
+          content: "Por favor ingresa un nombre valido",
+        });
+      } else if (category.toLowerCase() === "categoria" || category === "") {
+        Modal.warning({
+          title: "Categoria Invalida",
+          content: "Por favor ingresa una categoria valida",
+        });
+      } else if (
+        subcategory.toLowerCase() === "sub categoria" ||
+        subcategory === ""
+      ) {
+        Modal.warning({
+          title: "Sub categoria Invalida",
+          content: "Por favor ingresa una sub categoria valida",
+        });
+      } else if (
+        medition.toLowerCase() === "unidad de medida" ||
+        medition === ""
+      ) {
+        Modal.warning({
+          title: "Unidad de medida invalida",
+          content: "Por favor ingresa una unidad de medida invalida valido",
+        });
+      } else {
+        for (let i = 0; i < store.length; i++) {
+          let storage = store[i].name;
+          await addDoc(collection(db, storage), {
+            storage: storage,
+            name: name,
+            category: category,
+            subcategory: subcategory,
+            medition: medition,
+            lastIn: "Sin ingreso registrado",
+            lastWithdraw: "Sin retiro registrado",
+            stock: 0,
+          })
+            .then(() => {
+              console.log("producto añadido al inventario");
+            })
+            .catch(function (error) {
+              alert("Error al añadir el documento", error);
+              console.error("Error al añadir el documento", error);
+            });
+        }
+        await addDoc(collection(db, "productClass"), {
+          name: name,
+          category: category,
+          subcategoruy: subcategory,
+          medition: medition,
         })
           .then(() => {
-            console.log("producto añadido al inventario");
+            this.product = {
+              name: "Nombre",
+              category: "Categoria",
+              subcategory: "Sub Categoria",
+              medition: "Unidad de Medida",
+            };
+            this.products = [];
+            this.getData("products");
+            console.log("producto añadido");
           })
           .catch(function (error) {
-            alert("Error al añadir el documento", error);
-            console.error("Error al añadir el documento", error);
+            alert("Error al añadir el documento!", error);
+            console.error("Error al añadir el documento!", error);
           });
       }
-      await addDoc(collection(db, "productClass"), {
-        name: this.product.name,
-        category: this.product.category,
-        subcategoruy: this.product.subcategory,
-        medition: this.product.medition,
-      })
-        .then(() => {
-          this.product = {};
-          this.products = [];
-          this.getData("products");
-          console.log("producto añadido");
-        })
-        .catch(function (error) {
-          alert("Error al añadir el documento!", error);
-          console.error("Error al añadir el documento!", error);
-        });
     },
     async addItem(type) {
       // Intentar eliminar los if y usar solo el type para crear una funcion valida
@@ -190,6 +258,7 @@ export const useCustomStore = defineStore({
             console.log(this.container[0]);
           })
           .catch((error) => {
+            alert("Error al añadir el documento: ", error);
             console.error("Error al añadir el documento: ", error);
           });
       } else if (type === "categories" && this.container[1].model.length > 0) {
@@ -217,9 +286,10 @@ export const useCustomStore = defineStore({
             this.container[2].data = [];
             this.container[2].model = "";
             this.getData("subcategories");
-            console.log(this.container.data[2]);
+            console.log(this.container[2].data);
           })
           .catch((error) => {
+            alert.error("Error al añadir el documento: ", error);
             console.error("Error al añadir el documento: ", error);
           });
       } else if (type === "meditions" && this.container[3].model.length > 0) {
@@ -230,7 +300,7 @@ export const useCustomStore = defineStore({
             this.container[3].data = [];
             this.container[3].model = "";
             this.getData("meditions");
-            console.log(this.container.data[3]);
+            console.log(this.container[3].data);
           })
           .catch((error) => {
             alert("Error al añadir el documento: ", error);
@@ -274,15 +344,25 @@ export const useCustomStore = defineStore({
       const coll = collection;
       await deleteDoc(doc(db, coll, id)).then(() => {
         if (coll === "storages") {
-          this.container[0].data = this.container[0].data.filter((item) => item.id !== id);
+          this.container[0].data = this.container[0].data.filter(
+            (item) => item.id !== id
+          );
         } else if (coll === "categories") {
-          this.container[1].data = this.container[1].data.filter((item) => item.id !== id);
+          this.container[1].data = this.container[1].data.filter(
+            (item) => item.id !== id
+          );
         } else if (coll === "subcategories") {
-          this.container[2].data = this.container[2].data.filter((item) => item.id !== id);
+          this.container[2].data = this.container[2].data.filter(
+            (item) => item.id !== id
+          );
         } else if (coll === "meditions") {
-          this.container[3].data = this.container[3].data.filter((item) => item.id !== id);
+          this.container[3].data = this.container[3].data.filter(
+            (item) => item.id !== id
+          );
         } else if (coll === "products") {
-          this.container[4].data = this.container[4].data.filter((item) => item.id !== id);
+          this.container[4].data = this.container[4].data.filter(
+            (item) => item.id !== id
+          );
         }
       });
     },
