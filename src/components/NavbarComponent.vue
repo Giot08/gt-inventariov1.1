@@ -35,11 +35,11 @@
       </a-menu-item>
       <a-menu-item v-if="collapsed" key="5">
         <template #icon>
-          <FallOutlined />
+          <FormOutlined />
         </template>
-        <router-link to="/mermas">Mermas</router-link>
+        <router-link to="/reports">Reportes</router-link>
       </a-menu-item>
-      <a-menu-item v-if="collapsed" key="5">
+      <a-menu-item v-if="collapsed" key="6">
         <a-button type="primary" @click.prevent="authentication.signout()" danger>Logout</a-button>
       </a-menu-item>
     </a-menu>
@@ -59,7 +59,7 @@ import {
   DesktopOutlined,
   ArrowRightOutlined,
   ArrowLeftOutlined,
-  FallOutlined,
+  FormOutlined,
 } from "@ant-design/icons-vue";
 export default defineComponent({
   components: {
@@ -68,7 +68,7 @@ export default defineComponent({
     DesktopOutlined,
     ArrowRightOutlined,
     ArrowLeftOutlined,
-    FallOutlined,
+    FormOutlined,
   },
   setup() {
     const authentication = useAuthStore();

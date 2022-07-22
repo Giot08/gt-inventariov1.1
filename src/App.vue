@@ -20,6 +20,7 @@ const custom = useCustomStore();
 onMounted(() => {
   custom.getAllDatas();
   inventoryStore.getStorages();
+  inventoryStore.getStorageActions();
 });
 </script>
 

@@ -1,11 +1,25 @@
 <template>
   <a-page-header
     style="border: 1px solid rgb(235, 237, 240)"
-    title="Administrar inventarios"
+    title="Administración de inventarios"
   />
-  <a-table
+  <div v-if="inventoryStore.products.length == 0">
+    <a-spin
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem;
+        gap: 1em;
+        font-weight: 600;
+      "
+      tip="Cargando"
+    />
+  </div>
+  <div>
+    <a-table
     bordered
-    :columns="inventoryStore.columns"
+    :columns="inventoryStore.inventoryTable"
     :data-source="inventoryStore.products"
   >
     <!-- El Record es la iteracion del bucle a renderizar, 
@@ -13,7 +27,21 @@
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'edit'">
         <div class="editFlex">
-          <a-button @click="inventoryStore.modifyStock('decrease', record.storage, record.id, record.name, record.stock, record.medition )" type="primary" danger>
+          <a-button
+            @click="
+              inventoryStore.modifyStock(
+                'Retirado',
+                record.storage,
+                record.id,
+                record.name,
+                record.stock,
+                record.medition,
+                record.modelStock
+              )
+            "
+            type="primary"
+            danger
+          >
             <template #icon><MinusSquareOutlined /></template>
           </a-button>
           <a-input
@@ -21,9 +49,24 @@
             type="number"
             size="small"
             placeholder="0"
+            v-model:value="record.modelStock"
             style="width: 50px !important; text-align: center"
           />
-          <a-button @click="inventoryStore.modifyStock('increase', record.storage, record.id, record.name, record.stock, record.medition )" type="primary" style="background-color: #52c41a">
+          <a-button
+            @click="
+              inventoryStore.modifyStock(
+                'Ingresado',
+                record.storage,
+                record.id,
+                record.name,
+                record.stock,
+                record.medition,
+                record.modelStock
+              )
+            "
+            type="primary"
+            style="background-color: #52c41a"
+          >
             <template #icon><PlusSquareOutlined /></template>
           </a-button>
         </div>
@@ -40,6 +83,7 @@
       </template>
     </template>
   </a-table>
+  </div>
 </template>
 
 <script setup>
@@ -47,7 +91,6 @@
 import { useInventoryStore } from "@/db/inventory";
 //AntD
 import { PlusSquareOutlined, MinusSquareOutlined } from "@ant-design/icons-vue";
-
 const inventoryStore = useInventoryStore();
 </script>
 <style scoped>
@@ -64,4 +107,4 @@ const inventoryStore = useInventoryStore();
 table {
   margin-right: 10px;
 }
-</style>
+</style>ñ

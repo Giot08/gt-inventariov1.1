@@ -7,7 +7,6 @@
         :header="container.label"
       >
         <a-spin 
-        delay="3000"
         v-show="container.data == 0"
         style="display: flex; justify-content: center; align-items: center; margin: 1rem; gap: 1em;"  
         tip="Cargando"  

@@ -12,9 +12,9 @@ const routes = [
     component: () => import('../views/CustomizeView.vue')
   },
   {
-    path: '/mermas',
-    name: 'decrease',
-    component: () => import('../views/DecreaseView.vue')
+    path: '/reports',
+    name: 'reports',
+    component: () => import('../views/ReportsView.vue')
   },
   {
     path: '/inventario',
