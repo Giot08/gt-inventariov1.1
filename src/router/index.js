@@ -21,6 +21,11 @@ const routes = [
     name: 'inventory',
     component: () => import('../views/InventoryView.vue')
   },
+  {
+    path: '/losses',
+    name: 'losses',
+    component: () => import('../views/LossesView.vue')
+  },
 ]
 
 const router = createRouter({

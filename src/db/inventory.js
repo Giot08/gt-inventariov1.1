@@ -195,7 +195,7 @@ export const useInventoryStore = defineStore({
       newStock
     ) {
       await addDoc(collection(db, "storageActions"), {
-        register: `Se a ${action} la cantidad de ${modelStock}${medition} de ${name} en ${storage} a la fecha de ${fullDate} quedando el stock de ${newStock}${medition}`,
+        register: `Se a ${action} la cantidad de ${modelStock} ${medition} de ${name} en ${storage} a la fecha de ${fullDate} quedando el stock de ${newStock}${medition}`,
         date: fullDate,
       });
       this.storage_reg = [];
@@ -220,7 +220,7 @@ export const useInventoryStore = defineStore({
         this.storage_reg.push(dataCat);
       });
       this.storage_reg = this.storage_reg.sort(function (a, b) {
-        return b.date.localeCompare(a.date);
+        return a.date.localeCompare(b.date);
       });
       console.log(this.storage_reg);
     },
